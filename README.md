@@ -19,6 +19,8 @@ Ayudantia 8 --> https://youtu.be/o95FOPyAeqg
 
 Ayudantia 9 --> https://youtu.be/8J4jFFTXZbc
 
+Ayudantia 10 --> https://youtu.be/CDqITtC06I4
+
 # Referencias que podrian ser utiles
 
 RMarkdown Cookbook ---> https://bookdown.org/yihui/rmarkdown-cookbook 
