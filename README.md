@@ -3,9 +3,9 @@ Aqui podran encontrar el material con el cual se irá trabajando en las ayudanti
 
 # Link Ayudantias
 
-#Ayudantia#    ---     #Link Youtube#    ---     #Link Ayudantia#
+Ayudantia --------- Link Youtube --------- Link Ayudantia
 
-Ayudantia 1 ---> https://youtu.be/3Cx-lJBD0jA --->
+[Ayudantia 1](../main/Ayudantia 1) ---> https://youtu.be/3Cx-lJBD0jA ---> 
 
 Ayudantia 2 ---> https://youtu.be/gZm8mk8bf_k --->
 
