@@ -1,6 +1,19 @@
 Ayudantia 11 Arboles de Decision
 ================
 
+## Actividad Ayudantia 11
+
+  - Para la actividad de esta ayudantia realizaran el analisis de arbol
+    de decision a partir de alguno de los dos data sets que quedaron
+    subidos. Para el caso de Credit Card el objetivo sera clasificar si
+    el cliente va a pagar o no el credito que adeuda. Mientras para el
+    caso de Hotel Bookings el objetivo sera determinar si la reserva del
+    hotel sera o no cancelada. (Comparen los resultados obtenidos
+    mediante arboles de decision con los modelos de regresion logistica,
+    naive bayes y KNN)
+
+## Ayudantia 11
+
   - Para esta ayudantia utilizaremos el dataset Adult Census
     (<https://www.kaggle.com/uciml/adult-census-income>) en el link
     podran en contrar mas detalles del dataset.
@@ -204,7 +217,7 @@ theme(plot.title = element_text(size = 20, face = "bold"))
 target_count
 ```
 
-![](Ayudantia11_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](Ayudantia11_files/figure-gfm/plot%20count-1.png)<!-- -->
 
 ``` r
 table(adult$workclass)
@@ -233,7 +246,7 @@ theme(plot.title = element_text(size = 18, family="sans", face = "bold"))
 plot1
 ```
 
-![](Ayudantia11_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](Ayudantia11_files/figure-gfm/plot1-1.png)<!-- -->
 
 ``` r
 plot2 <- ggplot(adult, aes(x = relationship, fill = income)) + 
@@ -252,7 +265,7 @@ theme(plot.title = element_text(size = 18, family="sans", face = "bold"))
 plot2
 ```
 
-![](Ayudantia11_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](Ayudantia11_files/figure-gfm/plot2-1.png)<!-- -->
 
 ``` r
 library(patchwork)
@@ -290,10 +303,9 @@ combined <- plot3 + plot4 + plot5 + plot6 & theme(legend.position = "bottom") + 
 combined + plot_layout(guides = "collect")
 ```
 
-![](Ayudantia11_files/figure-gfm/unnamed-chunk-10-1.png)<!-- --> \#
-Implementacion Decision Trees
+![](Ayudantia11_files/figure-gfm/plot3-1.png)<!-- -->
 
-## Separar data en Test y Train
+## Implementacion Decision Trees, separar data en Test y Train
 
 ``` r
 library(tidymodels)
@@ -308,19 +320,19 @@ str(train_data)
 ```
 
     ## 'data.frame':    24130 obs. of  15 variables:
-    ##  $ age           : int  82 54 41 34 38 74 68 45 38 52 ...
-    ##  $ workclass     : Factor w/ 8 levels "Federal-gov",..: 4 4 4 4 4 7 1 4 6 4 ...
-    ##  $ fnlwgt        : int  132870 140359 264663 216864 150601 88638 422013 172274 164526 129177 ...
-    ##  $ education     : Factor w/ 16 levels "10th","11th",..: 12 6 16 12 1 11 12 11 15 10 ...
-    ##  $ education.num : int  9 4 10 9 6 16 9 16 15 13 ...
-    ##  $ marital.status: Factor w/ 7 levels "Divorced","Married-AF-spouse",..: 7 1 6 1 6 5 1 1 5 7 ...
-    ##  $ occupation    : Factor w/ 14 levels "Adm-clerical",..: 4 7 10 8 1 10 10 10 10 8 ...
-    ##  $ relationship  : Factor w/ 6 levels "Husband","Not-in-family",..: 2 5 4 5 5 3 2 5 2 2 ...
-    ##  $ race          : Factor w/ 5 levels "Amer-Indian-Eskimo",..: 5 5 5 5 5 5 5 3 5 5 ...
-    ##  $ sex           : Factor w/ 2 levels "Female","Male": 1 1 1 1 2 1 1 1 2 1 ...
+    ##  $ age           : int  82 54 41 34 38 74 68 38 52 32 ...
+    ##  $ workclass     : Factor w/ 8 levels "Federal-gov",..: 4 4 4 4 4 7 1 6 4 4 ...
+    ##  $ fnlwgt        : int  132870 140359 264663 216864 150601 88638 422013 164526 129177 136204 ...
+    ##  $ education     : Factor w/ 16 levels "10th","11th",..: 12 6 16 12 1 11 12 15 10 13 ...
+    ##  $ education.num : int  9 4 10 9 6 16 9 15 13 14 ...
+    ##  $ marital.status: Factor w/ 7 levels "Divorced","Married-AF-spouse",..: 7 1 6 1 6 5 1 5 7 6 ...
+    ##  $ occupation    : Factor w/ 14 levels "Adm-clerical",..: 4 7 10 8 1 10 10 10 8 4 ...
+    ##  $ relationship  : Factor w/ 6 levels "Husband","Not-in-family",..: 2 5 4 5 5 3 2 2 2 2 ...
+    ##  $ race          : Factor w/ 5 levels "Amer-Indian-Eskimo",..: 5 5 5 5 5 5 5 5 5 5 ...
+    ##  $ sex           : Factor w/ 2 levels "Female","Male": 1 1 1 1 2 1 1 2 1 2 ...
     ##  $ capital.gain  : int  0 0 0 0 0 0 0 0 0 0 ...
-    ##  $ capital.loss  : int  4356 3900 3900 3770 3770 3683 3683 3004 2824 2824 ...
-    ##  $ hours.per.week: int  18 40 40 45 40 20 40 35 45 20 ...
+    ##  $ capital.loss  : int  4356 3900 3900 3770 3770 3683 3683 2824 2824 2824 ...
+    ##  $ hours.per.week: int  18 40 40 45 40 20 40 45 20 55 ...
     ##  $ native.country: Factor w/ 41 levels "Cambodia","Canada",..: 39 39 39 39 39 39 39 39 39 39 ...
     ##  $ income        : Factor w/ 2 levels "0","1": 1 1 1 1 1 2 1 2 2 2 ...
 
@@ -329,21 +341,21 @@ str(test_data)
 ```
 
     ## 'data.frame':    6032 obs. of  15 variables:
-    ##  $ age           : int  45 57 34 38 54 51 73 41 49 41 ...
-    ##  $ workclass     : Factor w/ 8 levels "Federal-gov",..: 4 4 4 4 4 4 6 4 4 2 ...
-    ##  $ fnlwgt        : int  172822 317847 203034 175360 161691 115066 233882 132222 199029 297248 ...
-    ##  $ education     : Factor w/ 16 levels "10th","11th",..: 2 13 10 1 13 16 12 15 10 15 ...
-    ##  $ education.num : int  7 14 13 6 14 10 9 15 13 15 ...
-    ##  $ marital.status: Factor w/ 7 levels "Divorced","Married-AF-spouse",..: 1 1 6 5 1 1 3 3 3 3 ...
-    ##  $ occupation    : Factor w/ 14 levels "Adm-clerical",..: 14 4 12 10 10 1 5 10 12 10 ...
-    ##  $ relationship  : Factor w/ 6 levels "Husband","Not-in-family",..: 2 2 2 2 2 5 1 1 1 1 ...
-    ##  $ race          : Factor w/ 5 levels "Amer-Indian-Eskimo",..: 5 5 5 5 5 5 2 5 5 5 ...
-    ##  $ sex           : Factor w/ 2 levels "Female","Male": 2 2 2 2 1 1 2 2 2 2 ...
+    ##  $ age           : int  45 52 43 38 33 37 55 39 42 46 ...
+    ##  $ workclass     : Factor w/ 8 levels "Federal-gov",..: 4 4 4 4 4 4 5 4 4 4 ...
+    ##  $ fnlwgt        : int  172274 198863 289669 237608 194901 329980 124137 179731 154374 326857 ...
+    ##  $ education     : Factor w/ 16 levels "10th","11th",..: 11 15 13 10 9 13 15 13 10 13 ...
+    ##  $ education.num : int  16 15 14 13 11 14 15 14 13 14 ...
+    ##  $ marital.status: Factor w/ 7 levels "Divorced","Married-AF-spouse",..: 1 1 1 5 6 3 3 3 3 3 ...
+    ##  $ occupation    : Factor w/ 14 levels "Adm-clerical",..: 10 4 10 12 3 4 10 4 4 12 ...
+    ##  $ relationship  : Factor w/ 6 levels "Husband","Not-in-family",..: 5 2 5 2 2 1 1 6 1 1 ...
+    ##  $ race          : Factor w/ 5 levels "Amer-Indian-Eskimo",..: 3 5 5 5 5 5 5 5 5 5 ...
+    ##  $ sex           : Factor w/ 2 levels "Female","Male": 1 2 1 1 2 2 2 1 2 2 ...
     ##  $ capital.gain  : int  0 0 0 0 0 0 0 0 0 0 ...
-    ##  $ capital.loss  : int  2824 2824 2824 2559 2559 2547 2457 2415 2415 2415 ...
-    ##  $ hours.per.week: int  76 50 50 90 40 40 40 40 55 45 ...
-    ##  $ native.country: Factor w/ 41 levels "Cambodia","Canada",..: 39 39 39 39 39 39 40 39 39 39 ...
-    ##  $ income        : Factor w/ 2 levels "0","1": 2 2 2 2 2 2 1 2 2 2 ...
+    ##  $ capital.loss  : int  3004 2559 2547 2444 2444 2415 2415 2415 2415 2415 ...
+    ##  $ hours.per.week: int  35 60 40 45 42 60 35 65 60 65 ...
+    ##  $ native.country: Factor w/ 41 levels "Cambodia","Canada",..: 39 39 39 39 39 39 12 39 39 39 ...
+    ##  $ income        : Factor w/ 2 levels "0","1": 2 2 2 2 2 2 2 2 2 2 ...
 
 ## Seleccion de Atributos
 
@@ -434,7 +446,7 @@ fit_mod(modelo_trees)
     ## # A tibble: 1 x 3
     ##   .metric .estimator .estimate
     ##   <chr>   <chr>          <dbl>
-    ## 1 roc_auc binary         0.849
+    ## 1 roc_auc binary         0.846
 
   - Ahora compararemos con otros modelos (regresion logistica, naive
     bayes o KNN), aprovechando que la libreria tidymodels nos facilita
@@ -458,7 +470,7 @@ fit_mod(modelo_rl)
     ## # A tibble: 1 x 3
     ##   .metric .estimator .estimate
     ##   <chr>   <chr>          <dbl>
-    ## 1 roc_auc binary         0.899
+    ## 1 roc_auc binary         0.895
 
 ## Naive Bayes
 
@@ -479,13 +491,10 @@ fit_mod(modelo_nb)
     ## Warning: naive_bayes(): Feature education - zero probabilities are present.
     ## Consider Laplace smoothing.
 
-    ## Warning: naive_bayes(): Feature occupation - zero probabilities are present.
-    ## Consider Laplace smoothing.
-
     ## # A tibble: 1 x 3
     ##   .metric .estimator .estimate
     ##   <chr>   <chr>          <dbl>
-    ## 1 roc_auc binary         0.888
+    ## 1 roc_auc binary         0.881
 
 ## KNN
 
@@ -539,7 +548,7 @@ censo <- rpart(income~., data = train, method = "class")
 rpart.plot(censo)
 ```
 
-![](Ayudantia11_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](Ayudantia11_files/figure-gfm/plot%20tree%20-1.png)<!-- -->
 
 ## Predict
 
@@ -549,24 +558,24 @@ pred_income %>% as.data.frame() %>% head()
 ```
 
     ##    .
-    ## 13 0
-    ## 14 0
-    ## 15 0
-    ## 24 0
-    ## 34 0
-    ## 37 0
+    ## 8  0
+    ## 27 0
+    ## 38 0
+    ## 50 0
+    ## 51 0
+    ## 57 1
 
 ``` r
 pred_income %>% as.data.frame() %>% tail()
 ```
 
     ##       .
-    ## 30135 0
-    ## 30137 0
     ## 30141 1
-    ## 30147 0
     ## 30150 0
-    ## 30158 0
+    ## 30151 0
+    ## 30156 0
+    ## 30159 0
+    ## 30160 0
 
 ``` r
 test_data$predictedincome <- pred_income
@@ -580,24 +589,24 @@ pred_incom_roc %>% as.data.frame() %>% head()
 ```
 
     ##            0          1
-    ## 13 0.9473475 0.05265254
-    ## 14 0.9473475 0.05265254
-    ## 15 0.9473475 0.05265254
-    ## 24 0.9473475 0.05265254
-    ## 34 0.9473475 0.05265254
-    ## 37 0.9473475 0.05265254
+    ## 8  0.9473394 0.05266062
+    ## 27 0.9473394 0.05266062
+    ## 38 0.9473394 0.05266062
+    ## 50 0.9473394 0.05266062
+    ## 51 0.9473394 0.05266062
+    ## 57 0.2685269 0.73147315
 
 ``` r
 pred_incom_roc %>% as.data.frame() %>% tail()
 ```
 
     ##               0          1
-    ## 30135 0.9473475 0.05265254
-    ## 30137 0.9473475 0.05265254
-    ## 30141 0.2666468 0.73335315
-    ## 30147 0.9473475 0.05265254
-    ## 30150 0.9473475 0.05265254
-    ## 30158 0.9473475 0.05265254
+    ## 30141 0.2685269 0.73147315
+    ## 30150 0.9473394 0.05266062
+    ## 30151 0.6992240 0.30077602
+    ## 30156 0.9473394 0.05266062
+    ## 30159 0.6992240 0.30077602
+    ## 30160 0.6992240 0.30077602
 
 ``` r
 pred_incom_roc <- pred_incom_roc %>% as.data.frame()
@@ -619,26 +628,26 @@ print(cm)
     ## 
     ##    
     ##        0    1
-    ##   0 4273  236
-    ##   1  763  760
+    ##   0 4264  237
+    ##   1  752  779
     ##                                           
-    ##                Accuracy : 0.8344          
-    ##                  95% CI : (0.8248, 0.8437)
-    ##     No Information Rate : 0.8349          
-    ##     P-Value [Acc > NIR] : 0.5498          
+    ##                Accuracy : 0.836           
+    ##                  95% CI : (0.8265, 0.8453)
+    ##     No Information Rate : 0.8316          
+    ##     P-Value [Acc > NIR] : 0.1811          
     ##                                           
-    ##                   Kappa : 0.5045          
+    ##                   Kappa : 0.5131          
     ##                                           
     ##  Mcnemar's Test P-Value : <2e-16          
     ##                                           
-    ##             Sensitivity : 0.8485          
-    ##             Specificity : 0.7631          
-    ##          Pos Pred Value : 0.9477          
-    ##          Neg Pred Value : 0.4990          
-    ##              Prevalence : 0.8349          
-    ##          Detection Rate : 0.7084          
-    ##    Detection Prevalence : 0.7475          
-    ##       Balanced Accuracy : 0.8058          
+    ##             Sensitivity : 0.8501          
+    ##             Specificity : 0.7667          
+    ##          Pos Pred Value : 0.9473          
+    ##          Neg Pred Value : 0.5088          
+    ##              Prevalence : 0.8316          
+    ##          Detection Rate : 0.7069          
+    ##    Detection Prevalence : 0.7462          
+    ##       Balanced Accuracy : 0.8084          
     ##                                           
     ##        'Positive' Class : 0               
     ## 
@@ -648,13 +657,13 @@ print(cm$byClass)
 ```
 
     ##          Sensitivity          Specificity       Pos Pred Value 
-    ##            0.8484909            0.7630522            0.9476602 
+    ##            0.8500797            0.7667323            0.9473450 
     ##       Neg Pred Value            Precision               Recall 
-    ##            0.4990151            0.9476602            0.8484909 
+    ##            0.5088178            0.9473450            0.8500797 
     ##                   F1           Prevalence       Detection Rate 
-    ##            0.8953379            0.8348806            0.7083886 
+    ##            0.8960807            0.8315650            0.7068966 
     ## Detection Prevalence    Balanced Accuracy 
-    ##            0.7475133            0.8057715
+    ##            0.7461870            0.8084060
 
 ``` r
 plotTable <- table %>%
@@ -684,7 +693,7 @@ confusionMatrix <- ggplot(data = plotTable, mapping = aes(x = Reference, y = Pre
 confusionMatrix
 ```
 
-![](Ayudantia11_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+![](Ayudantia11_files/figure-gfm/evaluacion%20modelo%20-1.png)<!-- -->
 
 ## Curva ROC
 
@@ -701,13 +710,13 @@ plot(ROC, col = "#fd634b", family = "sans", cex = 2, main = "CART Model ROC Curv
 AUC = 0.8474")
 ```
 
-![](Ayudantia11_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+![](Ayudantia11_files/figure-gfm/curva%20ROC%20-1.png)<!-- -->
 
 ``` r
 auc(ROC)
 ```
 
-    ## Area under the curve: 0.8491
+    ## Area under the curve: 0.8464
 
 ## Chequeo de Overfitting - Train vs Test Accuracy
 
@@ -717,14 +726,14 @@ misClassError <- mean(is_predictedincome != train_data$income)
 print(paste('Train-set Accuracy =',1-misClassError))
 ```
 
-    ## [1] "Train-set Accuracy = 0.841856610029009"
+    ## [1] "Train-set Accuracy = 0.841442188147534"
 
 ``` r
 misClassError <- mean(test_data$predictedincome != test_data$income)
 print(paste('Test-set Accuracy =',1-misClassError))
 ```
 
-    ## [1] "Test-set Accuracy = 0.834383289124668"
+    ## [1] "Test-set Accuracy = 0.836041114058355"
 
   - Al observar los resultados del AUC y el accuracy del modelo, podemos
     concluir que el modelo CART hizo un buen trabajo de clasificacion.
@@ -757,30 +766,30 @@ best_model
     ## 
     ## No pre-processing
     ## Resampling: Cross-Validated (10 fold) 
-    ## Summary of sample sizes: 21716, 21716, 21717, 21718, 21718, 21716, ... 
+    ## Summary of sample sizes: 21717, 21716, 21717, 21717, 21717, 21717, ... 
     ## Resampling results across tuning parameters:
     ## 
     ##   cp           Accuracy   Kappa    
-    ##   0.001503759  0.8433901  0.5403523
-    ##   0.001587302  0.8432658  0.5409028
-    ##   0.002506266  0.8409448  0.5411325
-    ##   0.003842941  0.8405719  0.5424138
-    ##   0.005179616  0.8405718  0.5409604
-    ##   0.005513784  0.8398673  0.5375916
-    ##   0.025062657  0.8350590  0.5062676
-    ##   0.036090226  0.8254032  0.4586709
-    ##   0.053801170  0.8148783  0.4086713
-    ##   0.073851295  0.7751765  0.1491252
+    ##   0.001171156  0.8439701  0.5412071
+    ##   0.001254810  0.8435556  0.5404255
+    ##   0.001422118  0.8435143  0.5410638
+    ##   0.003346160  0.8426026  0.5453789
+    ##   0.005353856  0.8416494  0.5445255
+    ##   0.006023089  0.8409036  0.5434843
+    ##   0.027271206  0.8355165  0.5147757
+    ##   0.036473147  0.8242850  0.4551339
+    ##   0.052200100  0.8154166  0.4104007
+    ##   0.076041492  0.7801881  0.1847591
     ## 
     ## Accuracy was used to select the optimal model using the largest value.
-    ## The final value used for the model was cp = 0.001503759.
+    ## The final value used for the model was cp = 0.001171156.
 
 ``` r
 best_model$bestTune
 ```
 
     ##            cp
-    ## 1 0.001503759
+    ## 1 0.001171156
 
 ## Predict
 
@@ -795,16 +804,16 @@ pred_income %>% as.data.frame() %>% head()
     ## 3 0
     ## 4 0
     ## 5 0
-    ## 6 0
+    ## 6 1
 
 ``` r
 pred_income %>% as.data.frame() %>% tail()
 ```
 
     ##      .
-    ## 6027 0
+    ## 6027 1
     ## 6028 0
-    ## 6029 1
+    ## 6029 0
     ## 6030 0
     ## 6031 0
     ## 6032 0
@@ -821,24 +830,24 @@ pred_incom_roc %>% as.data.frame() %>% head()
 ```
 
     ##            0          1
-    ## 13 0.9467907 0.05320926
-    ## 14 0.9467907 0.05320926
-    ## 15 0.9467907 0.05320926
-    ## 24 0.9467907 0.05320926
-    ## 34 0.9467907 0.05320926
-    ## 37 0.9467907 0.05320926
+    ## 8  0.9468420 0.05315798
+    ## 27 0.9468420 0.05315798
+    ## 38 0.9468420 0.05315798
+    ## 50 0.9468420 0.05315798
+    ## 51 0.9468420 0.05315798
+    ## 57 0.1477833 0.85221675
 
 ``` r
 pred_incom_roc %>% as.data.frame() %>% tail()
 ```
 
     ##               0          1
-    ## 30135 0.9467907 0.05320926
-    ## 30137 0.9467907 0.05320926
-    ## 30141 0.3461975 0.65380250
-    ## 30147 0.9467907 0.05320926
-    ## 30150 0.9467907 0.05320926
-    ## 30158 0.9467907 0.05320926
+    ## 30141 0.2436647 0.75633528
+    ## 30150 0.9468420 0.05315798
+    ## 30151 0.7256569 0.27434312
+    ## 30156 0.9468420 0.05315798
+    ## 30159 0.7256569 0.27434312
+    ## 30160 0.7256569 0.27434312
 
 ``` r
 pred_incom_roc <- pred_incom_roc %>% as.data.frame()
@@ -860,26 +869,26 @@ print(cm)
     ## 
     ##    
     ##        0    1
-    ##   0 4177  332
-    ##   1  627  896
+    ##   0 4236  265
+    ##   1  716  815
     ##                                           
-    ##                Accuracy : 0.841           
-    ##                  95% CI : (0.8315, 0.8502)
-    ##     No Information Rate : 0.7964          
-    ##     P-Value [Acc > NIR] : < 2.2e-16       
+    ##                Accuracy : 0.8374          
+    ##                  95% CI : (0.8278, 0.8466)
+    ##     No Information Rate : 0.821           
+    ##     P-Value [Acc > NIR] : 0.0004108       
     ##                                           
-    ##                   Kappa : 0.55            
+    ##                   Kappa : 0.5244          
     ##                                           
     ##  Mcnemar's Test P-Value : < 2.2e-16       
     ##                                           
-    ##             Sensitivity : 0.8695          
-    ##             Specificity : 0.7296          
-    ##          Pos Pred Value : 0.9264          
-    ##          Neg Pred Value : 0.5883          
-    ##              Prevalence : 0.7964          
-    ##          Detection Rate : 0.6925          
-    ##    Detection Prevalence : 0.7475          
-    ##       Balanced Accuracy : 0.7996          
+    ##             Sensitivity : 0.8554          
+    ##             Specificity : 0.7546          
+    ##          Pos Pred Value : 0.9411          
+    ##          Neg Pred Value : 0.5323          
+    ##              Prevalence : 0.8210          
+    ##          Detection Rate : 0.7023          
+    ##    Detection Prevalence : 0.7462          
+    ##       Balanced Accuracy : 0.8050          
     ##                                           
     ##        'Positive' Class : 0               
     ## 
@@ -889,13 +898,13 @@ print(cm$byClass)
 ```
 
     ##          Sensitivity          Specificity       Pos Pred Value 
-    ##            0.8694838            0.7296417            0.9263695 
+    ##            0.8554120            0.7546296            0.9411242 
     ##       Neg Pred Value            Precision               Recall 
-    ##            0.5883125            0.9263695            0.8694838 
+    ##            0.5323318            0.9411242            0.8554120 
     ##                   F1           Prevalence       Detection Rate 
-    ##            0.8970257            0.7964191            0.6924735 
+    ##            0.8962234            0.8209549            0.7022546 
     ## Detection Prevalence    Balanced Accuracy 
-    ##            0.7475133            0.7995627
+    ##            0.7461870            0.8050208
 
 ``` r
 plotTable <- table %>%
@@ -925,7 +934,7 @@ confusionMatrix <- ggplot(data = plotTable, mapping = aes(x = Reference, y = Pre
 confusionMatrix
 ```
 
-![](Ayudantia11_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
+![](Ayudantia11_files/figure-gfm/evaluacion%20modelo%20tuneado%20-1.png)<!-- -->
 
 ## Curva ROC
 
@@ -944,10 +953,10 @@ plot(ROC, col = "#fd634b", family = "sans", cex = 2, main = "CART Model ROC Curv
 AUC = 0.8648")
 ```
 
-![](Ayudantia11_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+![](Ayudantia11_files/figure-gfm/curva%20ROC%20modelo%20tuneado%20-1.png)<!-- -->
 
 ``` r
 auc(ROC)
 ```
 
-    ## Area under the curve: 0.8696
+    ## Area under the curve: 0.8563

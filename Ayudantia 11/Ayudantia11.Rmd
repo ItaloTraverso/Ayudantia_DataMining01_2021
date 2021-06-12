@@ -7,6 +7,12 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Actividad Ayudantia 11
+
+- Para la actividad de esta ayudantia realizaran el analisis de arbol de decision a partir de alguno de los dos data sets que quedaron subidos. Para el caso de Credit Card el objetivo sera clasificar si el cliente va a pagar o no el credito que adeuda. Mientras para el caso de Hotel Bookings el objetivo sera determinar si la reserva del hotel sera o no cancelada. (Comparen los resultados obtenidos mediante arboles de decision con los modelos de regresion logistica, naive bayes y KNN)
+
+## Ayudantia 11
+
 - Para esta ayudantia utilizaremos el dataset Adult Census (https://www.kaggle.com/uciml/adult-census-income) en el link podran en contrar mas detalles del dataset.
 - El objetivo es utilizar el modelo de arboles de decision que nos permita clasificar si ingreso es <=50K o >50K, para luego generar una prediccion a partir de nuestro modelo. Evaluaremos los resultados del modelo y realizaremos un acercamiento a lo que es el tuneo de modelos.
 
@@ -18,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Cargamos las librerias
 
-```{r message=FALSE}
+```{r cargando librerias, message=FALSE}
 library(plyr)
 library(ggplot2)
 library(tidyverse)
@@ -30,7 +36,7 @@ library(pROC)
 
 ## Cargamos los datos
 
-```{r}
+```{r cargando datos}
 setwd("D:/Users/Italo/Documents/Italo Felipe/UAI/Semestre 11/Ayudantia Mineria de Datos/material ayudantia/DataSets")
 
 # adult <- read.csv("D:/Users/Italo/Documents/Italo Felipe/UAI/Semestre 11/Ayudantia Mineria de Datos/material ayudantia/DataSets/adult.csv")
@@ -38,24 +44,24 @@ setwd("D:/Users/Italo/Documents/Italo Felipe/UAI/Semestre 11/Ayudantia Mineria d
 adult <- read.csv("D:/Users/Italo/Documents/Italo Felipe/UAI/Semestre 11/Ayudantia Mineria de Datos/material ayudantia/DataSets/adult.csv", na.strings = c("","NA"," ","?"))
 ```
 
-```{r}
+```{r exploracion1}
 head(adult)
 
 summary(adult)
 ```
 
-```{r}
+```{r exploracion2}
 str(adult)
 ```
 
 ## Transformamos la variable income
 
-```{r}
+```{r transformacion variables}
 #Map 0 to 1 the adult feature
 adult$income <- mapvalues(adult$income, from=c('>50K', '<=50K'), to=c(1,0))
 ```
 
-```{r}
+```{r eliminar na}
 adult %>% 
   summarise_all(funs(sum(is.na(.))))
 
@@ -67,7 +73,7 @@ adult %>%
 
 ## Exploracion de los datos
 
-```{r fig.width=7, fig.height=4}
+```{r  plot count, fig.width=7, fig.height=4}
 table(adult$income)
 
 target_count <- ggplot(adult, aes(x = income)) + 
@@ -82,7 +88,7 @@ theme(plot.title = element_text(size = 20, face = "bold"))
 
 target_count
 ```
-```{r fig.width=15, fig.height=6}
+```{r plot1, fig.width=15, fig.height=6}
 table(adult$workclass)
 
 plot1 <- ggplot(adult, aes(x = sex, fill = income)) + 
@@ -100,7 +106,7 @@ theme(plot.title = element_text(size = 18, family="sans", face = "bold"))
 
 plot1
 ```
-```{r fig.width=40, fig.height=10}
+```{r plot2, fig.width=40, fig.height=10}
 
 plot2 <- ggplot(adult, aes(x = relationship, fill = income)) + 
 scale_fill_manual(name = " ", labels = c("<=50K", ">50K"), values = c("1" = "#F0FF00","0"="#34495E")) +
@@ -118,7 +124,7 @@ theme(plot.title = element_text(size = 18, family="sans", face = "bold"))
 plot2
 ```
 
-```{r fig.width=12, fig.height=12}
+```{r plot3, fig.width=12, fig.height=12}
 library(patchwork)
 
 plot3 <- ggplot(adult,aes(fnlwgt, hours.per.week, color=income)) + 
@@ -153,11 +159,10 @@ plot6 <- ggplot(adult,aes(fnlwgt, capital.loss, color=income)) +
 combined <- plot3 + plot4 + plot5 + plot6 & theme(legend.position = "bottom") + theme(legend.text=element_text(size=20))
 combined + plot_layout(guides = "collect")
 ```
-# Implementacion Decision Trees
 
-## Separar data en Test y Train
+## Implementacion Decision Trees, separar data en Test y Train
 
-```{r}
+```{r separar data}
 library(tidymodels)
 
 data_split <- initial_split(adult, prop = 0.8)
@@ -174,7 +179,7 @@ str(test_data)
 
 - Si lo pensamos bien, marital.status y relationship son atributos que estan algo relacionadas. Lo mismo ocurre con education.num y education. Ademas hay atributos que no tienen mucha importancia para el analisis que tambien eliminaremos.
 
-```{r}
+```{r seleccion atributos}
 train <- subset(train_data, select = - c(relationship, education.num, race, native.country, capital.loss, fnlwgt, hours.per.week, workclass))
 test <- subset(test_data, select = - c(relationship, education.num, race, native.country, capital.loss, fnlwgt, hours.per.week, workclass))
 ```
@@ -183,7 +188,7 @@ test <- subset(test_data, select = - c(relationship, education.num, race, native
 
 - Primero creamos la receta de nuestro modelo
 
-```{r}
+```{r receta}
 receta <- 
   recipe(income ~ ., data = train)
 
@@ -192,7 +197,7 @@ receta
 
 - Luego procedemos a crear nuestro modelo de arbol de decision con 5 capas de decision, y un minimo numero de entidades por hoja (poda) de 10. La libreria que se utiliza para calcular este modelo sera la de rpart, que viene precargada en los paquetes que estamos utilizando. Con este paso solo definimos el modelo, aun no lo calculamos.
 
-```{r}
+```{r modelo arbol}
 modelo_trees <-
   decision_tree(tree_depth = 5, min_n = 10) %>% 
   set_engine("rpart") %>% 
@@ -203,7 +208,7 @@ modelo_trees
 
 - Ahora hacemos el fit del modelo, calculamos sus predicciones y calculamos el valor de AUC
 
-```{r}
+```{r fit modelo}
 fit_mod <- function(mod){
   
   modelo_fit <- 
@@ -226,7 +231,7 @@ fit_mod(modelo_trees)
 
 ## Regresion Logistica
 
-```{r}
+```{r modelo regresion logistica}
 modelo_rl <- 
   logistic_reg() %>% 
   set_engine("glm")
@@ -236,7 +241,7 @@ fit_mod(modelo_rl)
 
 ## Naive Bayes
 
-```{r}
+```{r modelo naive bayes}
 library(naivebayes)
 
 modelo_nb <-
@@ -248,7 +253,7 @@ fit_mod(modelo_nb)
 
 ## KNN
 
-```{r}
+```{r modelo KNN}
 library(kknn)
 
 modelo_knn <-
@@ -261,7 +266,7 @@ fit_mod(modelo_knn)
 
 - Podemos ver que en este caso el modelo de Naive Bayes y el modelo de Regresion Logistica son los que obtienen los mejores resultados al clasificar con un AUC de .89-.088.
 
-```{r fig.width=15, fig.height=8}
+```{r plot tree ,fig.width=15, fig.height=8}
 library(rpart)
 library(rpart.plot)
 
@@ -273,7 +278,7 @@ rpart.plot(censo)
 
 ## Predict
 
-```{r}
+```{r predict modelo}
 pred_income <- predict(censo, newdata = test, type = "class")
 pred_income %>% as.data.frame() %>% head()
 pred_income %>% as.data.frame() %>% tail()
@@ -281,7 +286,7 @@ pred_income %>% as.data.frame() %>% tail()
 test_data$predictedincome <- pred_income
 ```
 
-```{r}
+```{r predict ROC}
 ## Prob para curva ROC
 
 pred_incom_roc <- predict(censo, newdata = test, type = "prob")
@@ -292,7 +297,7 @@ prob <- pred_incom_roc$"1"
 ```
 ## Evaluar Modelo
 
-```{r fig.width=10, fig.height=10}
+```{r evaluacion modelo ,fig.width=10, fig.height=10}
 
 cm <- confusionMatrix(table(test_data$income, test_data$predictedincome))
 test_data$predictedincome <- as.factor(test_data$predictedincome)
@@ -326,7 +331,7 @@ confusionMatrix
 
 ## Curva ROC
 
-```{r fig.width=7, fig.height=8}
+```{r curva ROC ,fig.width=7, fig.height=8}
 ROC <- roc(test_data$income,prob)
 plot(ROC, col = "#fd634b", family = "sans", cex = 2, main = "CART Model ROC Curve 
 AUC = 0.8474")
@@ -335,7 +340,7 @@ auc(ROC)
 
 ## Chequeo de Overfitting - Train vs Test Accuracy
 
-```{r}
+```{r overfitting}
 is_predictedincome <- predict(censo,newdata=train_data,type='class')
 misClassError <- mean(is_predictedincome != train_data$income)
 print(paste('Train-set Accuracy =',1-misClassError))
@@ -349,7 +354,7 @@ print(paste('Test-set Accuracy =',1-misClassError))
 
 ## Creando un modelo CART optimo: Tuneo Automatico
 
-```{r}
+```{r tuneo modelo}
 set.seed(823)
 fitControl <- trainControl(method = "cv", number = 10,         
                       verboseIter = FALSE)
@@ -365,7 +370,7 @@ best_model$bestTune
 
 ## Predict
 
-```{r}
+```{r predict modelo tuneado}
 pred_income <- predict(best_model, newdata = test, type = "raw")
 pred_income %>% as.data.frame() %>% head()
 pred_income %>% as.data.frame() %>% tail()
@@ -373,7 +378,7 @@ pred_income %>% as.data.frame() %>% tail()
 test_data$predictedincome <- pred_income
 ```
 
-```{r}
+```{r predict ROC modelo tuneado}
 ## Prob para curva ROC
 
 pred_incom_roc <- predict(best_model, newdata = test, type = "prob")
@@ -384,7 +389,7 @@ prob <- pred_incom_roc$"1"
 ```
 ## Evaluar Modelo
 
-```{r fig.width=10, fig.height=10}
+```{r evaluacion modelo tuneado ,fig.width=10, fig.height=10}
 
 cm <- confusionMatrix(table(test_data$income, test_data$predictedincome))
 test_data$predictedincome <- as.factor(test_data$predictedincome)
@@ -418,7 +423,7 @@ confusionMatrix
 
 ## Curva ROC
 
-```{r fig.width=7, fig.height=8}
+```{r curva ROC modelo tuneado ,fig.width=7, fig.height=8}
 library(pROC)
 
 ROC <- roc(test_data$income,prob)
