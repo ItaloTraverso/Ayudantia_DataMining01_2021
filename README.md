@@ -3,6 +3,8 @@ Aqui podran encontrar el material con el cual se irá trabajando en las ayudanti
 
 # Link Ayudantias
 
+Ayudantia --- Link Youtube --- Link Ayudantia
+
 Ayudantia 1 ---> https://youtu.be/3Cx-lJBD0jA
 
 Ayudantia 2 ---> https://youtu.be/gZm8mk8bf_k
@@ -20,6 +22,8 @@ Ayudantia 8 --> https://youtu.be/o95FOPyAeqg
 Ayudantia 9 --> https://youtu.be/8J4jFFTXZbc
 
 Ayudantia 10 --> https://youtu.be/CDqITtC06I4
+
+Ayudantia 11 --> https://youtu.be/TdH69iVKotY
 
 # Referencias que podrian ser utiles
 
