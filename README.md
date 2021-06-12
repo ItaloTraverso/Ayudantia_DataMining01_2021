@@ -3,8 +3,6 @@ Aqui podran encontrar el material con el cual se irá trabajando en las ayudanti
 
 # Link Ayudantias
 
-Ayudantia --------- Link Youtube --------- Link Ayudantia
-
 [Ayudantia 1](https://github.com/ItaloTraverso/Ayudantia_DataMining01_2021/tree/main/Ayudantia%201) ---> https://youtu.be/3Cx-lJBD0jA ---> 
 
 [Ayudantia 2](https://github.com/ItaloTraverso/Ayudantia_DataMining01_2021/tree/main/Ayudantia%202) ---> https://youtu.be/gZm8mk8bf_k --->
