@@ -23,6 +23,8 @@ Ayudantia 4 --> https://youtu.be/j1Y46W_zxAc
 
 [Ayudantia 11](https://github.com/ItaloTraverso/Ayudantia_DataMining01_2021/tree/main/Ayudantia%2011) --> https://youtu.be/TdH69iVKotY
 
+[Ayudantia 12](https://github.com/ItaloTraverso/Ayudantia_DataMining01_2021/tree/main/Ayudantia%2012) --> https://youtu.be/5ytduAa6pes
+
 # Referencias que podrian ser utiles
 
 RMarkdown Cookbook ---> https://bookdown.org/yihui/rmarkdown-cookbook 
