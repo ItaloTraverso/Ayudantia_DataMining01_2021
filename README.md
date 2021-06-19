@@ -33,4 +33,4 @@ Ayudantia 4 --> https://youtu.be/j1Y46W_zxAc
 
 [TidyTuesdayR](https://github.com/rfordatascience/tidytuesday)
 
-R for Data Science ---> https://r4ds.had.co.nz/index.html 
+[R for Data Science](https://r4ds.had.co.nz/index.html)
