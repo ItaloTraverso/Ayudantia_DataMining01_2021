@@ -27,10 +27,10 @@ Ayudantia 4 --> https://youtu.be/j1Y46W_zxAc
 
 # Referencias que podrian ser utiles
 
-RMarkdown Cookbook ---> https://bookdown.org/yihui/rmarkdown-cookbook 
+[RMarkdown Cookbook](https://bookdown.org/yihui/rmarkdown-cookbook) 
 
-The Definitive Guide RMarkdown ---> https://bookdown.org/yihui/rmarkdown/ 
+[The Definitive Guide RMarkdown](https://bookdown.org/yihui/rmarkdown/)
 
-TidyTuesdayR ---> https://github.com/rfordatascience/tidytuesday 
+[TidyTuesdayR](https://github.com/rfordatascience/tidytuesday)
 
 R for Data Science ---> https://r4ds.had.co.nz/index.html 
